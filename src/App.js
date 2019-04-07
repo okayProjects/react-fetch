@@ -1,26 +1,35 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import User from './components/User';
+
 
 class App extends Component {
+
+  state = {
+    users: []
+  }
+
+  componentDidMount() {
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then(response => (response.json()))
+      .then(users => (
+        this.setState({
+          users
+        })
+      ))
+  }
+
+
   render() {
+    console.log(this.state.users);
+    const users = this.state.users.map((user, index) => (
+
+      <User key={user.id} name={user.name} street={user.address.street} city={user.address.city} email={user.email} number={index + 1} />
+    ))
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <ul style={{ listStyle: 'none' }}>
+        {users}
+      </ul>
     );
   }
 }
